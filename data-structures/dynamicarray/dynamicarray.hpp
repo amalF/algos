@@ -79,6 +79,22 @@ namespace ds {
 		}
 
 	template <typename T>
+		void DynamicArray<T>::insert(T element, int index){
+			if (index < 0 || index >=len) throw std::out_of_range("Index out of range");
+
+			if (len==capacity){
+				DynamicArray<T>::growSize();
+			}
+			//Move elements to the right
+			for (int i=len-1;i>=index;i--){
+				arr[i+1] == arr[i];
+			}
+			arr[index] = element;
+			len++;
+		}
+
+
+	template <typename T>
 		void DynamicArray<T>::removeAt(int index){
 			if (index>=len || index <0) throw std::out_of_range("Index out of range");
 

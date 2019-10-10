@@ -67,6 +67,23 @@ TEST(DynamicArrayTest, AddTest){
 	for (int i=0;i<10;i++){EXPECT_EQ(a1[i],i);}
 }
 
+TEST(DynamicArrayTest, AddGrowSizeTest){
+	DynamicArray<int> a1 = DynamicArray<int>(10);
+	for (int i=0;i<15;i++){ a1.add(i);}
+	for (int i=0;i<15;i++){EXPECT_EQ(a1[i],i);}
+	EXPECT_EQ(a1.maxSize(),20);
+}
+
+
+TEST(DynamicArrayTest, InsertTest){
+	DynamicArray<int> a1 = DynamicArray<int>(10);
+	for (int i=0;i<10;i++){ a1.add(i);}
+	a1.insert(50,5);
+	EXPECT_EQ(a1[5],50);
+	EXPECT_EQ(a1.size(),11);
+	EXPECT_EQ(a1.maxSize(),20);
+}
+
 TEST(DynamicArrayTest, AddAndRemoveTest){
 	DynamicArray<float> a1 = DynamicArray<float>(10);
 	for (int i=0;i<10;i++){ a1.add(1.0);}

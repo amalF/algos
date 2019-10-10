@@ -15,10 +15,6 @@ namespace ds {
 			public:
 				//Constructors
 
-
-
-
-
 				DynamicArray(int _capacity){
 					if (_capacity<0){
 						throw std::invalid_argument("Capacity cannot be negative");
@@ -32,8 +28,6 @@ namespace ds {
 
 				};
 
-
-
 				//Destructor
 				~DynamicArray(){
 					delete[] arr;
@@ -45,6 +39,7 @@ namespace ds {
 				void growSize();
 				void shrinkSize();
 				void add(T element);
+				void insert(T element, int index);
 				void removeAt(int rm_index);
 				void remove(T element);
 				int find(T element);
