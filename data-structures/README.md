@@ -1,5 +1,9 @@
 # Data Structures
 
+### Requirements
+* `cmake`
+* `gtest`
+
 ### Building
 Run the following commands
 ```
