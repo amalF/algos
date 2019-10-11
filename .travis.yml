@@ -2,18 +2,23 @@ sudo: false
 language: cpp
 dist: trusty
 
+env: #COMPILER=g++-5 CXXSTD=11,14,1z
+  global:
+    - CXX_FLAGS="std=c++11"
+
 install:
   # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
   - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
 
 os: linux
-env: COMPILER=g++-5 CXXSTD=11,14,1z
+
 
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - gcc-5 
       - g++-5
 
 script:
