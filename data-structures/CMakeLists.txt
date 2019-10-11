@@ -1,6 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 PROJECT(DataStructures)
+INCLUDE(gtest.cmake)
+FIND_PACKAGE(Threads)
 
 MESSAGE("Processing Top Level CMakeLists.txt")
 
