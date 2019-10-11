@@ -4,7 +4,7 @@ dist: trusty
 
 env: #COMPILER=g++-5 CXXSTD=11,14,1z
   global:
-    - CXX_FLAGS="std=c++11"
+    - CXX_FLAGS="-std=c++11"
 
 install:
   # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
