@@ -4,7 +4,11 @@ dist: trusty
 
 install:
   # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi       
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+
+os: linux
+env: COMPILER=g++-5 CXXSTD=11,14,1z
+
 addons:
   apt:
     sources:
@@ -14,3 +18,6 @@ addons:
 
 script:
   source travis.sh
+
+
+
