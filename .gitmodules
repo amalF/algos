@@ -1,0 +1,3 @@
+[submodule "data-structures/gtest"]
+	path = data-structures/gtest
+	url = https://github.com/google/googletest.git

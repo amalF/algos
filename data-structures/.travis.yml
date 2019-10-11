@@ -1,0 +1,13 @@
+sudo: false
+language: cpp
+dist: trusty
+
+addons:
+        apt:
+                sources:
+                        - ubuntu-toolchain-r-test
+                packages:
+                        - g++-5
+
+script:
+        travis.sh
