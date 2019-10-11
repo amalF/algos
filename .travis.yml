@@ -2,12 +2,15 @@ sudo: false
 language: cpp
 dist: trusty
 
+install:
+  # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi       
 addons:
-        apt:
-                sources:
-                        - ubuntu-toolchain-r-test
-                packages:
-                        - g++-5
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-5
 
 script:
-        source travis.sh
+  source travis.sh
