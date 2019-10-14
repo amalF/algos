@@ -14,3 +14,4 @@ ENABLE_TESTING()
 
 ADD_SUBDIRECTORY(unittests)
 ADD_SUBDIRECTORY(dynamicarray)
+ADD_SUBDIRECTORY(linkedlist)

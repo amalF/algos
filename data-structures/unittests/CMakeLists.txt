@@ -2,4 +2,5 @@
 #find_package(GTest REQUIRED)
 #include_directories(${GTEST_INCLUDE_DIRS})
 
-ADD_SUBDIRECTORY(testdynamicarray)
+add_subdirectory(testdynamicarray)
+add_subdirectory(testlinkedlist)
