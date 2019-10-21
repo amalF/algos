@@ -4,12 +4,17 @@
 #include <iostream>
 #include <ostream>
 #include <stdexcept>
+#include <math.h>
 #include "linkedlist.h"
 
 using namespace ds;
 
+/**
+ * Capacity
+ */
+
 template <typename T>
-int LinkedList<T>::size(){
+int LinkedList<T>::size() const{
   return len;
 }
 
@@ -18,8 +23,12 @@ bool LinkedList<T>::isEmpty(){
   return len == 0;
 }
 
+/**
+ * Modifiers
+ */
+
 template <typename T>
-void LinkedList<T>::push(const T & data){
+void LinkedList<T>::push_front(const T & data){
   /**
    * Insert a new node at the front of the list
    * O(1) thanks to the head pointer
@@ -33,16 +42,16 @@ void LinkedList<T>::push(const T & data){
 }
 
 template <typename T>
-void LinkedList<T>::insertAt(const T & data, int index){
+void LinkedList<T>::insert_at(const T & data, int index){
   /**
    * Insert a new node at a specific location
    * O(n) in the worst case we will traverse the list to get the node at the specified index
    */
 
-  if (index < 0 || index > len){ throw std::out_of_range("Index out of range");}
+  if (index < 0 || index > len){throw std::out_of_range("Index out of range");}
 
   if (index == 0){
-    LinkedList<T>::push(data);
+    LinkedList<T>::push_front(data);
     return;
   }
 
@@ -60,18 +69,16 @@ void LinkedList<T>::insertAt(const T & data, int index){
 }
 
 template <typename T>
-void LinkedList<T>::append(const T & data){
+void LinkedList<T>::push_back(T const & data){
   /**
    * Insert new node at the end of the listi
    * O(n) because we need to find the last node
    */
-  // find the tail of list
-
 
   // create the new node
   Node * new_node = new Node(data);
 
-  // If the list is empty, make the new as head
+  // If the list is empty, make the new node as head
   if (len == 0){
     head = new_node;
   }
@@ -87,6 +94,93 @@ void LinkedList<T>::append(const T & data){
 }
 
 template <typename T>
+void LinkedList<T>::pop_front(){
+  /**
+   * Remove the first element of the list
+   */
+
+  // remove the head
+  Node * todelete = head;
+  head = head->next;
+  delete todelete;
+  len--;
+}
+
+
+template <typename T>
+void LinkedList<T>::remove_at(int index){
+  /**
+   * Remove a node at a particular index
+   * O(n)
+   */
+
+  // empty list, nothing to do
+  if (index < 0 || index >= len){throw std::out_of_range("Index out of range");}
+
+  if (index == 0){
+    LinkedList<T>::pop_front();
+    return;
+  }
+
+  // find the previous node of the node at index
+  Node * prev = LinkedList<T>::get(index-1);
+
+  if (prev == nullptr || prev->next == nullptr){throw std::out_of_range("Index out of range");}
+
+  Node * todelete = prev->next;
+  prev->next = todelete->next;
+  delete todelete;
+  len--;
+}
+
+/**
+ * Operations
+ */
+
+template <typename T>
+void LinkedList<T>::remove_all(const T& data){
+  /**
+   * Remove all the occurences of particular value in the list
+   * Uses an additional pointer pointing to the previous node
+   * O(n)
+   */
+
+  // Empty list nothing to do
+  if (len == 0){return;}
+
+  Node * thru = head;
+  Node * prev = nullptr;
+
+  while (thru != nullptr){
+    if (thru->value == data){
+      if (prev == nullptr){
+        // Removing the head
+        Node * todelete = head;
+        head = head->next;
+        thru = head;
+        // free the node allocated memory
+        delete todelete;
+        todelete = nullptr;
+        len--;
+      }
+      else{
+        Node * todelete = thru;
+        prev->next = thru->next;
+        thru = thru->next;
+        // free the allocated memory
+        delete todelete;
+        todelete = nullptr;
+        len--;
+      }
+    }
+    else{
+      prev = thru;
+      thru = thru->next;
+    }
+  }
+}
+
+template <typename T>
 typename LinkedList<T>::Node * LinkedList<T>::find(const T & data){
   /**
    * Find and return the node containing `data`
@@ -97,7 +191,7 @@ typename LinkedList<T>::Node * LinkedList<T>::find(const T & data){
    */
   Node * thru = head;
   while (thru != nullptr){
-    if (thru->val == data){return thru;}
+    if (thru->value == data){return thru;}
     thru = thru->next;
   }
   return nullptr;
@@ -131,85 +225,203 @@ bool LinkedList<T>::contains(const T & data){
 }
 
 template <typename T>
-void LinkedList<T>::remove(const T& data){
+bool LinkedList<T>::equals(const LinkedList<T>& other) const {
   /**
-   * Remove all the occurences of particular value in the list
-   * Uses an additional pointer pointing to the previous node
+   * Checks if two lists are equal
    * O(n)
    */
 
-  // Empty list nothing to do
-  if (len == 0){return;}
-
-  Node * thru = head;
-  Node * prev = nullptr;
-
-  while (thru != nullptr){
-    if (thru->val == data){
-      if (prev == nullptr){
-        // Removing the head
-        Node * todelete = head;
-        head = head->next;
-        thru = head;
-        // free the node allocated memory
-        delete todelete;
-        todelete = nullptr;
-        len--;
-      }
-      else{
-        Node * todelete = thru;
-        prev->next = thru->next;
-        thru = thru->next;
-        // free the allocated memory
-        delete todelete;
-        todelete = nullptr;
-        len--;
-      }
-    }
-    else{
-      prev = thru;
-      thru = thru->next;
-    }
+  // If the lists are different sizes, they don't have the same contents.
+  if (len != other.size()) {
+    return false;
   }
+
+  // We'll iterate along both lists and check that all items match by value.
+  const Node* thisCur = head;
+  const Node* curOther = other.head;
+
+  while (thisCur) {
+    if (!curOther) {
+      throw std::runtime_error(std::string("Error in equals: ") + "curOther missing a node or wrong item count");
+    }
+    if (thisCur->value != curOther->value) {
+      return false;
+    }
+    thisCur = thisCur->next;
+    curOther = curOther->next;
+  }
+
+  return true;
 }
 
 
 template <typename T>
-void LinkedList<T>::removeAt(int index){
-  /**
-   * Remove a node at a particular index
-   * O(n)
-   */
-
-  // empty list, nothing to do
-  if (index < 0 || index >= len){throw std::out_of_range("Index out of range");}
-
-  if (index == 0){
-    // remove the head
-    Node * todelete = head;
-    head = head->next;
-    delete todelete;
-    len--;
+void LinkedList<T>::insertOrdered(const T& data){
+/**
+ * Insert a new node in the correct position assuming the list was previously sorted
+ * O(n)
+ */
+ 
+  if (!head || (head->value>data)){
+    push_front(data);
     return;
   }
+  
+  Node * new_node = new Node(data);
 
-  // find the previous node of the node at index
-  Node * prev = LinkedList<T>::get(index-1);
+  // Look for the first greater element to the new value 
+  Node * thru = head;
+  while (thru->next){
+    if (thru->next->value > data){
+      new_node->next = thru->next;
+      thru->next = new_node;
+      len ++;
+      return;
+    }
+    thru = thru->next;
+  }
 
-  if (prev == nullptr || prev->next == nullptr){throw std::out_of_range("Index out of range");}
-
-  Node * todelete = prev->next;
-  prev->next = todelete->next;
-  delete todelete;
-  len--;
+  // If we reach this point, this means that the new value is greater than all
+  // the values of the list
+  // Then insert the node at the end
+  thru->next = new_node;
+  len++;
 }
-
-/**
- * Operators
- */
 
 template <typename T>
-const T & LinkedList<T>::operator [](int index){
-  return LinkedList<T>::get(index)->val;
+bool LinkedList<T>::_isSorted(Node * headRef) const{
+  /**
+   * Recursively check if a list is sorted
+   *
+   */
+
+  if (!headRef->next){
+    return true;
+  }
+  else{
+    if (headRef->value > headRef->next->value){return false;}
+    return LinkedList<T>::_isSorted(headRef->next);
+  } 
 }
 
+template <typename T>
+bool LinkedList<T>::isSorted() const {
+  /**
+   * Wrapper around _isSorted
+   */
+  return LinkedList<T>::_isSorted(head);
+}
+
+template <typename T>
+std::tuple<LinkedList<T>,LinkedList<T>> LinkedList<T>::splitHalves() const{
+  /**
+   * Split a list into two halves
+   */
+
+  int middle = len/2; 
+  
+  LinkedList<T> firstHalf;
+  LinkedList<T> secondHalf = *this;  
+
+  if (len < 2){
+    return std::make_tuple(firstHalf, secondHalf);
+  }
+
+  for (int i=0;i<middle;i++){
+    firstHalf.push_back(secondHalf.head->value);
+    secondHalf.pop_front();
+  }
+
+  return std::make_tuple(firstHalf, secondHalf);
+}
+
+template <typename T>
+LinkedList<T> LinkedList<T>::merge(const LinkedList<T>& other) const {
+  /**
+   * Merge two sorted lists
+   * O(n)
+   */
+
+  if (len == 0){return other;}
+  if (other.len == 0){return *this;}
+
+  LinkedList<T> result;
+
+  Node * cur = head;
+  Node * curOther = other.head;
+
+  while (cur && curOther){
+    if (cur->value > curOther->value){
+      result.push_back(curOther->value);
+      curOther = curOther->next;
+    }
+    else{
+      result.push_back(cur->value);
+      cur = cur->next;
+    }
+  }
+
+  if (!cur && curOther){
+    while (curOther){
+      result.push_back(curOther->value);
+      curOther = curOther->next;
+    }
+    return result;
+  }
+
+  if (!curOther && cur){
+    while (cur){
+      result.push_back(cur->value);
+      cur = cur->next;
+    }
+  }
+  return result;
+}
+
+template <typename T>
+LinkedList<T> LinkedList<T>::insertionSort() const{
+  /**
+   * Sort a list using insertion sort algorithm
+   * O(n^2)
+   */
+
+  if (!head){return *this;}
+  LinkedList<T> result;
+
+  Node * cur = head;
+
+  while (cur){
+    result.insertOrdered(cur->value);
+    cur = cur->next;
+  }
+
+  return result;
+}
+
+template <typename T>
+LinkedList<T> LinkedList<T>::_mergeSort() const{
+  /**
+   * Implement merge sort algorithm recursively
+   * O(nlog(n))
+   */
+
+  //base case
+  if (len<2){return *this;}
+  else{
+    auto splits = splitHalves();
+    LinkedList<T> left = std::get<0>(splits);
+    LinkedList<T> right = std::get<1>(splits);
+    LinkedList<T> leftSorted = left._mergeSort();
+    LinkedList<T> rightSorted = right._mergeSort();
+    return leftSorted.merge(rightSorted);
+  }
+}
+
+template <typename T>
+LinkedList<T> LinkedList<T>::mergeSort() const{
+  /**
+   * A wrapper function to call merge sort 
+   */
+
+  return LinkedList<T>::_mergeSort();
+}
