@@ -238,17 +238,17 @@ bool LinkedList<T>::equals(const LinkedList<T>& other) const {
 
   // We'll iterate along both lists and check that all items match by value.
   const Node* thisCur = head;
-  const Node* otherCur = other.head;
+  const Node* curOther = other.head;
 
   while (thisCur) {
-    if (!otherCur) {
-      throw std::runtime_error(std::string("Error in equals: ") + "otherCur missing a node or wrong item count");
+    if (!curOther) {
+      throw std::runtime_error(std::string("Error in equals: ") + "curOther missing a node or wrong item count");
     }
-    if (thisCur->value != otherCur->value) {
+    if (thisCur->value != curOther->value) {
       return false;
     }
     thisCur = thisCur->next;
-    otherCur = otherCur->next;
+    curOther = curOther->next;
   }
 
   return true;
@@ -335,11 +335,93 @@ std::tuple<LinkedList<T>,LinkedList<T>> LinkedList<T>::splitHalves() const{
   return std::make_tuple(firstHalf, secondHalf);
 }
 
+template <typename T>
+LinkedList<T> LinkedList<T>::merge(const LinkedList<T>& other) const {
+  /**
+   * Merge two sorted lists
+   * O(n)
+   */
 
+  if (len == 0){return other;}
+  if (other.len == 0){return *this;}
 
+  LinkedList<T> result;
 
+  Node * cur = head;
+  Node * curOther = other.head;
 
+  while (cur && curOther){
+    if (cur->value > curOther->value){
+      result.push_back(curOther->value);
+      curOther = curOther->next;
+    }
+    else{
+      result.push_back(cur->value);
+      cur = cur->next;
+    }
+  }
 
+  if (!cur && curOther){
+    while (curOther){
+      result.push_back(curOther->value);
+      curOther = curOther->next;
+    }
+    return result;
+  }
 
+  if (!curOther && cur){
+    while (cur){
+      result.push_back(cur->value);
+      cur = cur->next;
+    }
+  }
+  return result;
+}
 
+template <typename T>
+LinkedList<T> LinkedList<T>::insertionSort() const{
+  /**
+   * Sort a list using insertion sort algorithm
+   * O(n^2)
+   */
 
+  if (!head){return *this;}
+  LinkedList<T> result;
+
+  Node * cur = head;
+
+  while (cur){
+    result.insertOrdered(cur->value);
+    cur = cur->next;
+  }
+
+  return result;
+}
+
+template <typename T>
+LinkedList<T> LinkedList<T>::_mergeSort() const{
+  /**
+   * Implement merge sort algorithm recursively
+   * O(nlog(n))
+   */
+
+  //base case
+  if (len<2){return *this;}
+  else{
+    auto splits = splitHalves();
+    LinkedList<T> left = std::get<0>(splits);
+    LinkedList<T> right = std::get<1>(splits);
+    LinkedList<T> leftSorted = left._mergeSort();
+    LinkedList<T> rightSorted = right._mergeSort();
+    return leftSorted.merge(rightSorted);
+  }
+}
+
+template <typename T>
+LinkedList<T> LinkedList<T>::mergeSort() const{
+  /**
+   * A wrapper function to call merge sort 
+   */
+
+  return LinkedList<T>::_mergeSort();
+}

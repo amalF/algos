@@ -302,3 +302,156 @@ TEST(LinkedListTest, SplitHalvesEvenSizeTest){
   EXPECT_EQ(std::get<1>(splits), expectedSecondHalf);
 }
 
+TEST(LinkedListTest, MergeBothListEmptyTest){
+  LinkedList<int> left;
+  LinkedList<int> right;
+  LinkedList<int> expectedList;
+  auto result = left.merge(right);
+  EXPECT_EQ(result.size(),0);
+  EXPECT_EQ(result, expectedList);
+}
+
+TEST(LinkedListTest, MergeLeftEmptyTest){
+  const int R[] = {1, 2, 3};
+  LinkedList<int> left;
+  LinkedList<int> right;
+
+  for (const int & elt : R){
+    right.push_back(elt);
+  }
+  auto result = left.merge(right);
+  //std::cout << result;
+  EXPECT_EQ(result, right);
+  EXPECT_EQ(result.size(),3);
+}
+
+TEST(LinkedListTest, MergeRightEmptyTest){
+  const int L[] = {5,7,49};
+  LinkedList<int> left;
+  LinkedList<int> right;
+
+  for (const int & elt : L){
+    left.push_back(elt);
+  }
+
+  auto result = left.merge(right);
+  //std::cout << result;
+  EXPECT_EQ(result, left);
+  EXPECT_EQ(result.size(),3);
+}
+
+TEST(LinkedListTest, MergeListSameSizeTest){
+  const int L[] = {1,5,10,20};
+  const int R[] = {2,4,11,19};
+  const int elements[] = {1,2,4,5,10,11,19,20};
+  LinkedList<int> left;
+  LinkedList<int> right;
+  LinkedList<int> expectedList;
+
+  for (const int & elt : L){
+    left.push_back(elt);
+  }
+
+  for (const int & elt : R){
+    right.push_back(elt);
+  }
+
+  for (const int & elt : elements){
+    expectedList.push_back(elt);
+  }
+
+  auto result = left.merge(right);
+
+  EXPECT_EQ(result, expectedList);
+  EXPECT_EQ(result.size(), 8);
+}
+
+TEST(LinkedListTest, MergeListLeftLongerTest){
+  const int L[] = {1,5,10,20};
+  const int R[] = {2,4};
+  const int elements[] = {1,2,4,5,10,20};
+  LinkedList<int> left;
+  LinkedList<int> right;
+  LinkedList<int> expectedList;
+
+  for (const int & elt : L){
+    left.push_back(elt);
+  }
+
+  for (const int & elt : R){
+    right.push_back(elt);
+  }
+
+  for (const int & elt : elements){
+    expectedList.push_back(elt);
+  }
+
+  auto result = left.merge(right);
+  EXPECT_EQ(result, expectedList);
+  EXPECT_EQ(result.size(), 6);
+}
+
+TEST(LinkedListTest, MergeListRightLongerTest){
+  const int L[] = {1,20};
+  const int R[] = {2,4,11,19};
+  const int elements[] = {1,2,4,11,19,20};
+  LinkedList<int> left;
+  LinkedList<int> right;
+  LinkedList<int> expectedList;
+
+  for (const int & elt : L){
+    left.push_back(elt);
+  }
+
+  for (const int & elt : R){
+    right.push_back(elt);
+  }
+
+  for (const int & elt : elements){
+    expectedList.push_back(elt);
+  }
+
+  auto result = left.merge(right);
+  EXPECT_EQ(result, expectedList);
+  EXPECT_EQ(result.size(), 6);
+}
+
+TEST(LinkedListTest, InsertionSortTest){
+  const int numbers[] = {2,4,1,19,20,11};
+  const int elements[] = {1,2,4,11,19,20};
+  LinkedList<int> list;
+  LinkedList<int> expectedList;
+
+  for (const int & elt : numbers){
+    list.push_back(elt);
+  }
+
+  for (const int & elt : elements){
+    expectedList.push_back(elt);
+  }
+
+  auto result = list.insertionSort();
+
+  EXPECT_EQ(result, expectedList);
+  EXPECT_EQ(result.size(), expectedList.size());
+}
+
+TEST(LinkedListTest, MergeSortTest){
+  const int numbers[] = {2,4,1,19,20,11};
+  const int elements[] = {1,2,4,11,19,20};
+  LinkedList<int> list;
+  LinkedList<int> expectedList;
+
+  for (const int & elt : numbers){
+    list.push_back(elt);
+  }
+
+  for (const int & elt : elements){
+    expectedList.push_back(elt);
+  }
+
+  auto result = list.mergeSort();
+
+  EXPECT_EQ(result, expectedList);
+  EXPECT_EQ(result.size(), expectedList.size());
+}

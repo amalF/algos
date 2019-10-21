@@ -103,11 +103,11 @@ namespace ds {
         }
         void insertOrdered(const T& newData);
         bool isSorted() const;
-        LinkedList<T> insertionSort() const;
         std::tuple<LinkedList<T>,LinkedList<T>> splitHalves() const;
         LinkedList<T> merge(const LinkedList<T>& other) const;
+        LinkedList<T> insertionSort() const;
         LinkedList<T> mergeSort() const;
-        std::ostream& print(std::ostream& os) const;
+        LinkedList<T> _mergeSort() const;
 
         friend std::ostream& operator<<(std::ostream& s, const LinkedList<T>& v) {
           s.put('[');
