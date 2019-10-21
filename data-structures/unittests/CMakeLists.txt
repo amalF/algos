@@ -1,6 +1,3 @@
-# Locate GTest
-#find_package(GTest REQUIRED)
-#include_directories(${GTEST_INCLUDE_DIRS})
-
 add_subdirectory(testdynamicarray)
 add_subdirectory(testlinkedlist)
+add_subdirectory(teststack)
