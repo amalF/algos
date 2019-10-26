@@ -1,0 +1,6 @@
+#Declare the library
+ADD_LIBRARY(stack INTERFACE)
+
+#Include Directory
+TARGET_INCLUDE_DIRECTORIES(stack INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
