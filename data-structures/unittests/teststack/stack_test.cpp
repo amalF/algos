@@ -43,7 +43,7 @@ TEST(StackTest, PopTest){
   EXPECT_EQ(a1.isEmpty(), true);
 }
 
-TEST(StackTest, EqualTest){
+/*TEST(StackTest, EqualTest){
   Stack<int> a1 = Stack<int>();
   const int elements[] = {1,2,3,4};
   for (const int& i : elements){
@@ -52,4 +52,4 @@ TEST(StackTest, EqualTest){
   Stack<int> a2 = a1; //copy constructor
   EXPECT_EQ(a1==a2, true);
   EXPECT_EQ(a1!=a2, false);
-}
+}*/
