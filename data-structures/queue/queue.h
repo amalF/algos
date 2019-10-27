@@ -23,9 +23,7 @@ namespace ds {
         };
 
         //copy constructor
-        Queue(const Queue<T>& other) : Queue(){
-          *this = other;
-        };
+        Queue(const Queue<T>& other) : data(other.data){};
 
         //assignment constructor
         Queue<T>& operator=(const Queue<T>& other){
