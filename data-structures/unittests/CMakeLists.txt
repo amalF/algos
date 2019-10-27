@@ -1,3 +1,4 @@
 add_subdirectory(testdynamicarray)
 add_subdirectory(testlinkedlist)
 add_subdirectory(teststack)
+add_subdirectory(testdoublelinkedlist)
