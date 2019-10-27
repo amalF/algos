@@ -6,7 +6,8 @@ This project will contains implementation of several data structures and algorit
 
 # Data Structures
 - [x] [Dynamic Array](data-structures/dynamicarray)
-- [x] [Simple Linked List](data-structures/linkedlist)
+- [x] [Simple Linked List](data-structures/linkedlist/linkedlist.hpp)
+- [x] [Double Linked List](data-structures/linkedlist/list.hpp)
 - [x] [Stack](data-structures/stack)
 	* [Stack (linked list)](data-structures/stack/stack.hpp)
 
