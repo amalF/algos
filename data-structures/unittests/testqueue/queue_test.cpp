@@ -44,13 +44,3 @@ TEST(QueueTest, PopTest){
   }
   EXPECT_EQ(a1.isEmpty(), true);
 }
-
-TEST(QueueTest, EqualTest){
-  Queue<int> a1 = Queue<int>();
-  for (int i=0;i<4;i++){
-    a1.push(i+1);
-  }
-  Queue<int> a2 = a1; //copy constructor
-  EXPECT_EQ(a1==a2, true);
-  EXPECT_EQ(a1!=a2, false);
-}

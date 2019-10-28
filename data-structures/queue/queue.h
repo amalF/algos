@@ -13,13 +13,13 @@ namespace ds {
     class Queue{
       public:
         //Default Constructor
-        Queue() {
-          data = new List<T>();
-        }; 
+        Queue() : data(new List<T>()){}; 
         // Destructor
         ~Queue(){
-          delete data;
-          data = nullptr;
+          if(data){
+            delete data;
+            data = nullptr;
+          }
         };
 
         //copy constructor
