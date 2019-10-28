@@ -8,7 +8,7 @@ env: #COMPILER=g++-5 CXXSTD=11,14,1z
 
 install:
   # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-7" CC="gcc-7"; fi
 
 os: linux
 
@@ -18,8 +18,8 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-5 
-      - g++-5
+      - gcc-7
+      - g++-7
 
 script:
   source travis.sh
