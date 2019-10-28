@@ -10,8 +10,8 @@ This project will contains implementation of several data structures and algorit
 - [x] [Double Linked List](data-structures/linkedlist/list.hpp)
 - [x] [Stack](data-structures/stack)
 	* [Stack (linked list)](data-structures/stack/stack.hpp)
-
-
+- [x] [Queue](data-structures/queue)
+	* [Queue (Double linked list)](data-structures/queue/queue.hpp)
 
 # Sorting Algorithms
 - [x] Insertion Sort ([Linked List](data-structures/linkedlist/linkedlist.hpp))

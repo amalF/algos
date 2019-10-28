@@ -1,5 +1,5 @@
 /**
- * Linked List Implementation
+ * Double Linked List Implementation
  * @author Amal Feriani
  */
 

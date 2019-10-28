@@ -1,0 +1,6 @@
+#Declare the library
+ADD_LIBRARY(queue INTERFACE)
+
+#Include Directory
+TARGET_INCLUDE_DIRECTORIES(queue INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
