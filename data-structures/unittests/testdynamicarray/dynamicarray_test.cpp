@@ -41,13 +41,11 @@ TEST(DynamicArrayTest, RemoveOutOfBoundTest3){
 }
 
 TEST(DynamicArrayTest, RemovingTest){
-	DynamicArray<std::string> a1 = DynamicArray<std::string>();
+	DynamicArray<std::string> a1 = DynamicArray<std::string>(10);
 	std::string strs[] = {"a", "b", "c","d","e","g","h"};
 	for (std::string s : strs){a1.add(s);}
-	//ASSERT_NO_THROW(
-	a1.remove("c");//);
+	a1.remove("c");
 	EXPECT_EQ(a1.size(),6);
-
 	ASSERT_THROW(a1.remove("z"),std::invalid_argument);
 }
 
@@ -133,4 +131,108 @@ TEST(DynamicArrayTest, ShrinkSizeTest){
 	EXPECT_EQ(a1.maxSize(),10);
 	a1.shrinkSize();
 	EXPECT_EQ(a1.maxSize(),5);
+}
+
+TEST(DynamicArrayTest, InsertOrderedAtFrontTest){
+
+  const int elements [] = {1,2,3,7,49};
+
+  DynamicArray<int> arr;
+
+  for (const int & elt : elements){
+    arr.add(elt);
+  }
+
+  arr.insertOrdered(-100);
+  EXPECT_EQ(arr[0], -100);
+  EXPECT_EQ(arr.size(), 6);
+
+}
+
+TEST(DynamicArrayTest, InsertOrderedAtEndTest){
+
+  const int elements [] = {1,2,3,7,49};
+  DynamicArray<int> arr;
+  for (const int & elt : elements){
+    arr.add(elt);
+  }
+
+  arr.insertOrdered(100);
+  EXPECT_EQ(arr[5], 100);
+  EXPECT_EQ(arr.size(), 6);
+}
+
+TEST(DynamicArrayTest, InsertOrderedAtMiddleTest){
+
+  const int elements [] = {1,2,3,7,49};
+  const int expected [] = {1,2,3,5,7,49};
+
+  DynamicArray<int> arr;
+  DynamicArray<int> arr_correct;
+
+  for (const int & elt : elements){
+    arr.add(elt);
+  }
+  for (const int & elt : expected){
+    arr_correct.add(elt);
+  }
+  const int item = 5;
+  arr.insertOrdered(item);
+	EXPECT_EQ(arr.size(), arr_correct.size());
+	for (int i=0;i<arr.size();i++){
+  	EXPECT_EQ(arr[i], arr_correct[i]);
+	}
+  EXPECT_EQ(arr[3],5);
+}
+
+TEST(DynamicArrayTest, InsertOrderedEmptyTest){
+  DynamicArray<int> arr;
+  const int a = 100;
+  arr.insertOrdered(a);
+  EXPECT_EQ(arr[0],100);
+  EXPECT_EQ(arr.size(), 1);
+}
+
+TEST(DynamicArrayTest, InsertionSortTest){
+  const int numbers[] = {2,4,1,19,20,11};
+  const int elements[] = {1,2,4,11,19,20};
+  DynamicArray<int> arr;
+  DynamicArray<int> arr_correct;
+
+  for (const int & elt : numbers){
+    arr.add(elt);
+  }
+
+  for (const int & elt : elements){
+    arr_correct.add(elt);
+  }
+
+  auto result = arr.insertionSort();
+	for (int i=0;i<result.size();i++){
+		EXPECT_EQ(result[i], arr_correct[i]);
+	}
+  
+  EXPECT_EQ(result.size(), arr_correct.size());
+}
+
+TEST(DynamicArrayTest, MergeSortTest){
+  const int numbers[] = {2,4,1,19,20,11};
+  const int elements[] = {1,2,4,11,19,20};
+  DynamicArray<int> arr;
+  DynamicArray<int> expectedArr;
+
+  for (const int & elt : numbers){
+    arr.add(elt);
+  }
+
+  for (const int & elt : elements){
+    expectedArr.add(elt);
+  }
+
+  arr.mergeSort();
+	for (int i=0;i<arr.size();i++){
+		EXPECT_EQ(arr[i], expectedArr[i]);
+	}
+	std::cout << arr;
+  EXPECT_EQ(arr.size(), expectedArr.size());
 }
