@@ -14,5 +14,5 @@ This project will contains implementation of several data structures and algorit
 	* [Queue (Double linked list)](data-structures/queue/queue.hpp)
 
 # Sorting Algorithms
-- [x] Insertion Sort ([Linked List](data-structures/linkedlist/linkedlist.hpp))
-- [x] Merge Sort ([Linked List](data-structures/linkedlist/linkedlist.hpp))
+- [x] Insertion Sort ([Linked List](data-structures/linkedlist/linkedlist.hpp), [dynamic array](data-structures/dynamicarray/dynamicarray.hpp))
+- [x] Merge Sort ([Linked List](data-structures/linkedlist/linkedlist.hpp), [dynamic array](data-structures/dynamicarray/dynamicarray.hpp))
