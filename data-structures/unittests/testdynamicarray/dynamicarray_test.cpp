@@ -41,13 +41,11 @@ TEST(DynamicArrayTest, RemoveOutOfBoundTest3){
 }
 
 TEST(DynamicArrayTest, RemovingTest){
-	DynamicArray<std::string> a1 = DynamicArray<std::string>();
+	DynamicArray<std::string> a1 = DynamicArray<std::string>(10);
 	std::string strs[] = {"a", "b", "c","d","e","g","h"};
 	for (std::string s : strs){a1.add(s);}
-	//ASSERT_NO_THROW(
-	a1.remove("c");//);
+	a1.remove("c");
 	EXPECT_EQ(a1.size(),6);
-
 	ASSERT_THROW(a1.remove("z"),std::invalid_argument);
 }
 
