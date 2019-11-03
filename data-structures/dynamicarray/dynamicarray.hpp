@@ -55,7 +55,7 @@ namespace ds {
 		}
 
 	template <typename T>
-		int DynamicArray<T>::find(T element){
+		int DynamicArray<T>::find(const T element){
 			for (int i = 0;i<len;i++){
 				if (arr[i] == element)
 					return i;
@@ -65,12 +65,12 @@ namespace ds {
 		}
 
 	template <typename T>
-		bool DynamicArray<T>::contains(T element){
+		bool DynamicArray<T>::contains(const T element){
 			return DynamicArray<T>::find(element) != -1;
 		}
 
 	template <typename T>
-		void DynamicArray<T>::add(T element){
+		void DynamicArray<T>::add(const T element){
 			//If we exceed the array capacity, resize the array by doubling its size
 			if (len+1>=capacity){
 				DynamicArray<T>::growSize();
@@ -79,16 +79,17 @@ namespace ds {
 		}
 
 	template <typename T>
-		void DynamicArray<T>::insert(T element, int index){
+		void DynamicArray<T>::insert(const T element, int index){
 			if (index < 0 || index >=len) throw std::out_of_range("Index out of range");
 
-			if (len==capacity){
+			if (len+1>=capacity){
 				DynamicArray<T>::growSize();
 			}
 			//Move elements to the right
 			for (int i=len-1;i>=index;i--){
-				arr[i+1] == arr[i];
+				arr[i+1] = arr[i];
 			}
+			
 			arr[index] = element;
 			len++;
 		}
@@ -112,10 +113,82 @@ namespace ds {
 		}
 
 	template <typename T>
-		void DynamicArray<T>::remove(T element){
+		void DynamicArray<T>::remove(const T element){
 			int index = DynamicArray<T>::find(element);
 			if (index == -1) throw std::invalid_argument("Element to remove not in the array");
 			else removeAt(index);
+		}
+
+	template <typename T>
+		void DynamicArray<T>::insertOrdered(const T element){
+			for (int i=0;i<len;i++){
+				if (element<arr[i]){
+					DynamicArray<T>::insert(element, i);
+					return;
+				}
+			}
+			DynamicArray<T>::add(element);
+		}
+
+	template <typename T>
+		DynamicArray<T> DynamicArray<T>::insertionSort(){
+			DynamicArray<T> result;
+			for (int i=0;i<len;i++){
+				result.insertOrdered(arr[i]);
+			}
+			return result;
+		}
+
+	template <typename T>
+		void DynamicArray<T>::mergeSort(){
+			return _mergeSort(0,len-1);
+		}
+
+	template <typename T>
+		void DynamicArray<T>::_mergeSort(int first, int last){
+			if (first<last){
+				int middle = (last + first)/2;
+				_mergeSort(first, middle);
+				_mergeSort(middle+1, last);
+				return _combine(first, middle, last); 
+			}
+		}
+
+	template <typename T>
+		void DynamicArray<T>::_combine(int first, int middle, int last){
+		DynamicArray<T> lhs = DynamicArray((middle-first+1));
+		DynamicArray<T> rhs = DynamicArray((last-middle));
+
+		for(int i=first;i<=middle;i++){
+			lhs.add(arr[i]);
+		}
+		for(int i=middle+1;i<last+1;i++){
+			rhs.add(arr[i]);
+		}
+
+		int i = 0;
+		int j = 0;
+
+		for (int k=first;k<last+1;k++){
+			if (j==rhs.size()){
+				arr[k] = lhs[i];
+				i++;
+			}
+			else if (i==lhs.size()){
+				arr[k] = rhs[j];
+				j++;
+			}
+			else{
+				if (lhs[i]<rhs[j]){
+					arr[k] = lhs[i];
+					i++;
+				}
+				else{
+					arr[k] = rhs[j];
+					j++;
+				}
+			}
+		}
 		}
 
 	/*
@@ -126,14 +199,5 @@ namespace ds {
 			return arr[index];
 		}
 
-	template <typename T>
-		std::ostream& operator<<(std::ostream& os, DynamicArray<T>& da){
-			for (int i =0;i<da.len-1;i++){
-				os << da.arr[i] << " ";
-			}
-			os << da.arr[da.len-1];
-
-			return os;
-		}
 }
 
