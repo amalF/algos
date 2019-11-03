@@ -30,17 +30,6 @@ namespace ds {
 					delete[] arr;
 					arr = nullptr;
 				}
-        DynamicArray(const DynamicArray<T>& other) : DynamicArray() {
-          *this = other;
-        }
-
-				//assignment constructor
-				DynamicArray<T>& operator=(const DynamicArray<T>& other){
-					arr = other.arr;
-					capacity = other.capacity;
-					len = other.len;
-				}
-
 
 				int size();
 				bool isEmpty();
