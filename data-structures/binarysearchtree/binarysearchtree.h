@@ -47,14 +47,14 @@ namespace ds{
 				int height=0;
 				int len=0;
 				TreeNode* _add(TreeNode* node, const T value);
-
+				TreeNode* _find(TreeNode* node, const T value);
+				TreeNode* _remove(TreeNode* node, const T value);
 
 			public:
 				BSTree() : _root(nullptr){};
 				BSTree(T value) : _root(new TreeNode(value)){};
 				~BSTree(){
-					bool success = deleteSubTree(_root);
-					if(!success){throw std::runtime_error("Something wrong happened during deleting the tree");}
+					deleteSubTree(_root);
 				}
 
 				int size(){return len;}
@@ -62,10 +62,27 @@ namespace ds{
 
 				T& top() const {
 					if (_root){return _root->data;}
+					else{throw std::runtime_error("Empty List");}
+				}
+
+				const T& min(){
+					if(_root){return getMin(_root)->data;}
+					else{throw std::runtime_error("Empty List");}
+				} 
+
+				const T& max(){
+					if(_root){return getMax(_root)->data;}
+					else{throw std::runtime_error("Empty list");}
 				}
 
 				bool deleteSubTree(TreeNode* targetRoot);
 				void add(const T value);
+				bool contains(const T value);
+				TreeNode* find(const T value);
+				bool remove(const T value);
+				TreeNode* getMin(TreeNode* node);
+				TreeNode* getMax(TreeNode* node) const;
+
 
 				std::ostream& Print(std::ostream& os) const;
 
@@ -77,6 +94,11 @@ namespace ds{
 
 	template <typename T>
 		void BSTree<T>::add(const T value){
+			/**
+			 * A wrapper function to add an element recursively in the tree
+			 * 
+			 * O(log(n))
+			 */
 
 			if (!_root){
 				_root = new TreeNode(value);
@@ -89,6 +111,11 @@ namespace ds{
 
 	template <typename T>
 		typename BSTree<T>::TreeNode* BSTree<T>::_add(TreeNode* rootNode, const T value){
+			/**
+			 * Recursively add new node to a tree
+			 * This implementation doesn't allow duplicates
+			 */
+
 			if (!rootNode){
 				rootNode = new TreeNode(value);
 			}
@@ -96,6 +123,7 @@ namespace ds{
 				std::cout << "Value already exists"<<std::endl;
 			}
 			else{
+				//Compare the value to the node data
 				if(value>rootNode->data){
 					rootNode->right = _add(rootNode->right, value);
 				}
@@ -108,6 +136,11 @@ namespace ds{
 
 	template <typename T>
 		bool BSTree<T>::deleteSubTree(TreeNode* targetRoot){
+			/**
+			 * Recursively delete a subtree and its children
+			 * O(n)
+			 */
+
 			if (!targetRoot){
 				return true;
 			}
@@ -123,7 +156,148 @@ namespace ds{
 		}
 
 	template <typename T>
+		typename BSTree<T>::TreeNode* BSTree<T>::find(const T value){
+			/*
+			 * Wrapper function to find the node with value equal to the specified value
+			 * 
+			 */
+			return _find(_root, value);
+		}
+
+	template <typename T>
+		typename BSTree<T>::TreeNode* BSTree<T>::_find(TreeNode* rootNode, const T value){
+			/**
+			 * Recursively find if a node is equal to the specified key
+			 * O(log(n))
+			 */
+
+			if (!rootNode){
+				return nullptr;
+			}
+			else if (rootNode->data==value){
+				return rootNode;
+			}
+			else{
+				if (value<rootNode->data){
+					return _find(rootNode->left, value);
+				}
+				else{
+					return _find(rootNode->right, value);
+				}
+			}
+		}
+
+	template <typename T>
+		bool BSTree<T>::contains(const T value){
+			/**
+			 * Check if the tree contains a node equals to the specified key
+			 */
+			return find(value)!=nullptr;
+		}
+
+	
+	template <typename T>
+		bool BSTree<T>::remove(const T value){
+			/**
+			 * Wrapper function to remove a value from a tree
+			 */
+
+			if (!find(value)){
+				std::cout << "Value doesn't exist in the tree" << std::endl;
+				return false;
+			}
+			else{
+				_root = _remove(_root, value);
+				return true;
+			}
+		}
+	template <typename T>
+		typename BSTree<T>::TreeNode* BSTree<T>::_remove(TreeNode* rootNode, const T value){
+			/**
+			 * Recursively remove an element from a tree
+			 * O(log(n))
+			 */
+
+			if (!rootNode){
+				return nullptr;
+			}
+			else if (rootNode->data==value){
+				std::vector<TreeNode*> childrenPtr = rootNode->getChildren();
+				if (childrenPtr.size()==0){
+					//If it's a leaf node, simply delete the node
+					delete rootNode;
+					rootNode = nullptr;
+				}
+				else if (childrenPtr.size()==1){
+					//If the node has node subtree, delete the node and replace it with its subtree
+					delete rootNode;
+					rootNode=nullptr;
+					return childrenPtr[0];
+				}
+				else{
+					//if the node has 2 subtrees, we look for the smallest node in the right subtree
+					// and swap it with the node. Then we delete the smallest node in the right subtree
+					// We can also use the biggest node in the left subtree instead the smallest node in
+					// the right subtree
+
+					// Find the smallest node by traversing as far left in the right subtree
+					TreeNode* minNode = getMin(rootNode->right);
+
+					//Create a new node that will replace the current node
+					//We cannot directly change the value of the node because 
+					//the data is a read-only member(const)
+					TreeNode* tmp = new TreeNode(minNode->data);
+					tmp->right = _remove(rootNode->right, minNode->data);
+					tmp->left = rootNode->left;
+					//deallocate the current node
+					delete rootNode;
+					rootNode = tmp;
+				}
+				len--;
+			}
+			else{
+				if (value<rootNode->data){
+					rootNode->left =  _remove(rootNode->left, value);
+				}else{
+					rootNode-> right = _remove(rootNode->right, value);
+				}
+			}
+			return rootNode;
+		}
+
+	template <typename T>
+		typename BSTree<T>::TreeNode* BSTree<T>::getMin(TreeNode* node){
+			/**
+			 * Find the smallest node in a subtree by traversing as far as possible
+			 * to the left
+			 */
+			TreeNode* cur = node;
+			while(cur->left){
+				cur = cur->left;
+			}
+			return cur;
+		}
+
+	template <typename T>
+		typename BSTree<T>::TreeNode* BSTree<T>::getMax(TreeNode* node) const{
+			/**
+			 * Find the biggest node in a subtree by traversing as far as possible
+			 * to the right
+			 */
+			TreeNode* cur = node;
+			while(cur->right){
+				cur = cur->right;
+			}
+			return cur;
+		}
+
+	template <typename T>
 		std::ostream& BSTree<T>::Print(std::ostream& os) const {
+			/**
+			 * Helper function to print a tree
+			 * This function was inspired by the code provided in the Illinois coursera 
+			 * programming assignment (https://www.coursera.org/learn/cs-fundamentals-2/home/welcome)
+			 */ 
 			const TreeNode* rootNode = this->_root;
 			if(!_root){
 				os << "[empty tree]" << std::endl;
@@ -132,9 +306,6 @@ namespace ds{
 
 			std::stack<const TreeNode*> nodesToPrint;
 			nodesToPrint.push(rootNode);
-
-			//std::stack<int> depthStack;
-			//depthStack.push(0);
 
 			std::stack<std::vector<bool>> curMarginStack;
 			curMarginStack.push( std::vector<bool>() );
@@ -145,9 +316,6 @@ namespace ds{
 
 				const TreeNode* cur = nodesToPrint.top();
 				nodesToPrint.pop();
-				// Pop the current depth for the node being explored.
-				//int curDepth = depthStack.top();
-				//depthStack.pop();
 
 				// Pop the current and trailing margin graphic flags for this node.
 				std::vector<bool> curMargin = curMarginStack.top();
@@ -193,14 +361,9 @@ namespace ds{
 
 				if (cur){
 					std::vector<TreeNode*> childrenPtr = cur->getChildren();
-					//std::cout << childrenPtr.size()<< std::endl;
-					//std::cout << "cur->left" << cur->left << std::endl;
-					//std::cout << "cur->right" << cur->right << std::endl;
 					for (auto it = childrenPtr.rbegin();it!=childrenPtr.rend();it++){
 						const TreeNode* childPtr = *it;
-						//std::cout << "CHildPTR " << childPtr->data << std::endl;
 						nodesToPrint.push(childPtr);
-						//depthStack.push(curDepth+1);
 						auto nextMargin = trailingMargin;
 						nextMargin.push_back(true);
 						curMarginStack.push(nextMargin);
