@@ -1,0 +1,5 @@
+#Declare the library
+ADD_LIBRARY(heap INTERFACE)
+
+#Include Directory
+TARGET_INCLUDE_DIRECTORIES(heap INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
