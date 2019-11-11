@@ -72,9 +72,6 @@ TEST(BSTTest, MinMaxTest){
 	bst.add(4);
 	bst.add(8);
 	bst.add(1);
-
-
-
 	
 	EXPECT_EQ(bst.min(),1);
 	EXPECT_EQ(bst.max(),8);
@@ -82,5 +79,20 @@ TEST(BSTTest, MinMaxTest){
 	ASSERT_THROW(bst2.max(), std::runtime_error);
 }
 
+TEST(BSTTest, PreOrderTraversalTest){
+	BSTree<int> bst;
+	bst.add(5);
+	bst.add(4);
+	bst.add(8);
+	bst.add(1);
+	bst.add(7);
+	bst.add(9);
+	bst.add(10);
 
+	bst.preorderTraversal();
+	bst.inorderTraversal();
+	bst.postorderTraversal();
+	bst.bfs();
+	
+}
 

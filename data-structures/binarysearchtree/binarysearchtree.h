@@ -10,6 +10,7 @@
 #include <ostream>
 #include <vector>
 #include <stack>
+#include "queue.h"
 
 namespace ds{
 	template <typename T>
@@ -49,6 +50,9 @@ namespace ds{
 				TreeNode* _add(TreeNode* node, const T value);
 				TreeNode* _find(TreeNode* node, const T value);
 				TreeNode* _remove(TreeNode* node, const T value);
+				void _inorderTraversal(TreeNode* node);
+				void _preorderTraversal(TreeNode* node);
+				void _postorderTraversal(TreeNode* node);
 
 			public:
 				BSTree() : _root(nullptr){};
@@ -65,12 +69,12 @@ namespace ds{
 					else{throw std::runtime_error("Empty List");}
 				}
 
-				const T& min(){
+				const T& min() const{
 					if(_root){return getMin(_root)->data;}
 					else{throw std::runtime_error("Empty List");}
-				} 
+				}
 
-				const T& max(){
+				const T& max() const{
 					if(_root){return getMax(_root)->data;}
 					else{throw std::runtime_error("Empty list");}
 				}
@@ -80,8 +84,13 @@ namespace ds{
 				bool contains(const T value);
 				TreeNode* find(const T value);
 				bool remove(const T value);
-				TreeNode* getMin(TreeNode* node);
+				TreeNode* getMin(TreeNode* node) const;
 				TreeNode* getMax(TreeNode* node) const;
+
+				void inorderTraversal();
+				void preorderTraversal();
+				void postorderTraversal();
+				void bfs();
 
 
 				std::ostream& Print(std::ostream& os) const;
@@ -96,7 +105,7 @@ namespace ds{
 		void BSTree<T>::add(const T value){
 			/**
 			 * A wrapper function to add an element recursively in the tree
-			 * 
+			 *
 			 * O(log(n))
 			 */
 
@@ -159,7 +168,7 @@ namespace ds{
 		typename BSTree<T>::TreeNode* BSTree<T>::find(const T value){
 			/*
 			 * Wrapper function to find the node with value equal to the specified value
-			 * 
+			 *
 			 */
 			return _find(_root, value);
 		}
@@ -195,7 +204,7 @@ namespace ds{
 			return find(value)!=nullptr;
 		}
 
-	
+
 	template <typename T>
 		bool BSTree<T>::remove(const T value){
 			/**
@@ -244,7 +253,7 @@ namespace ds{
 					TreeNode* minNode = getMin(rootNode->right);
 
 					//Create a new node that will replace the current node
-					//We cannot directly change the value of the node because 
+					//We cannot directly change the value of the node because
 					//the data is a read-only member(const)
 					TreeNode* tmp = new TreeNode(minNode->data);
 					tmp->right = _remove(rootNode->right, minNode->data);
@@ -266,7 +275,7 @@ namespace ds{
 		}
 
 	template <typename T>
-		typename BSTree<T>::TreeNode* BSTree<T>::getMin(TreeNode* node){
+		typename BSTree<T>::TreeNode* BSTree<T>::getMin(TreeNode* node) const{
 			/**
 			 * Find the smallest node in a subtree by traversing as far as possible
 			 * to the left
@@ -292,12 +301,80 @@ namespace ds{
 		}
 
 	template <typename T>
+		void BSTree<T>::preorderTraversal(){
+			_preorderTraversal(_root);
+			std::cout << std::endl;
+		}
+	template <typename T>
+		void BSTree<T>::_preorderTraversal(TreeNode* node){
+			if (!node){
+				return;
+			}
+			std::cout << node->data << " ";
+			_preorderTraversal(node->left);
+			_preorderTraversal(node->right);
+		}
+
+	template <typename T>
+		void BSTree<T>::inorderTraversal(){
+			_inorderTraversal(_root);
+			std::cout << std::endl;
+		}
+	template <typename T>
+		void BSTree<T>::_inorderTraversal(TreeNode* node){
+			if (!node){
+				return;
+			}
+			_inorderTraversal(node->left);
+			std::cout << node->data << " ";
+			_inorderTraversal(node->right);
+		}
+
+	template <typename T>
+		void BSTree<T>::postorderTraversal(){
+			_postorderTraversal(_root);
+			std::cout << std::endl;
+		}
+	template <typename T>
+		void BSTree<T>::_postorderTraversal(TreeNode* node){
+			if (!node){
+				return;
+			}
+			_postorderTraversal(node->left);
+			_postorderTraversal(node->right);
+			std::cout << node->data << " ";
+		}
+
+	template <typename T>
+		void BSTree<T>::bfs(){
+			Queue<const TreeNode*> nodesToExplore;
+			nodesToExplore.push(_root);
+			while(!nodesToExplore.isEmpty()){
+				const TreeNode* cur = nodesToExplore.front();
+				if (cur){
+					std::cout << cur->data << " ";
+					
+					if(cur->left){
+						const TreeNode* l = cur->left;
+						nodesToExplore.push(l);
+					}
+					if(cur->right){
+						const TreeNode* r = cur->right;
+						nodesToExplore.push(r);
+					}
+					nodesToExplore.pop();
+				}
+			}
+			std::cout << std::endl;
+		}
+
+	template <typename T>
 		std::ostream& BSTree<T>::Print(std::ostream& os) const {
 			/**
 			 * Helper function to print a tree
-			 * This function was inspired by the code provided in the Illinois coursera 
+			 * This function was inspired by the code provided in the Illinois coursera
 			 * programming assignment (https://www.coursera.org/learn/cs-fundamentals-2/home/welcome)
-			 */ 
+			 */
 			const TreeNode* rootNode = this->_root;
 			if(!_root){
 				os << "[empty tree]" << std::endl;
