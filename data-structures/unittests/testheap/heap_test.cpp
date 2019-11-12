@@ -31,5 +31,4 @@ TEST(HeapTest, PushEmptyHeapTest){
         EXPECT_EQ(q.top(),3);
         EXPECT_EQ(q.size(),14);
         EXPECT_EQ(q.isEmpty(), false);
-
 }

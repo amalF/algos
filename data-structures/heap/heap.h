@@ -12,17 +12,15 @@ namespace ds {
   template <typename T>
     class Heap{
       public:
-        Heap(): data(new DynamicArray<T>()){data->add(-10000000);};
+        Heap(): data(new DynamicArray<T>()){};
         Heap(int capacity): data(new DynamicArray<T>(capacity)){
-          data->add(-10000000);
         };
-        //~Heap(){};
 
-        int size(){return data->size()-1;}
-        bool isEmpty(){return data->size()-1==0;}
+        int size(){return data->size();}
+        bool isEmpty(){return data->size()==0;}
         const T& top() const{
           if(data->size()>0){
-            return data->peek(1);
+            return data->peek(0);
           }
         }
                                                                               
@@ -46,17 +44,23 @@ namespace ds {
     void Heap<T>::push(const T value){
       data->add(value);
       int len = data->size()-1;
-      _heapifyUp(len);
-    }
+			_heapifyUp(len);
+		}
   
 
   template <typename T>
     int Heap<T>::_parent(int index){
-      return index/2;
+			if (index % 2 ==0){
+				return index/2 -1;
+			}else{
+				return index/2;
+			}
+      
     }
 
   template <typename T>
     void Heap<T>::_heapifyUp(int index){
+			if (index==0){return;}
       int parentIndex = _parent(index);
       if (data->peek(parentIndex)<data->peek(index)){
         return;
