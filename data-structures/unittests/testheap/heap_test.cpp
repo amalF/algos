@@ -10,11 +10,9 @@ using namespace ds;
 
 TEST(HeapTest, isEmptyTest){
 	Heap<int> q;
-	Heap<int> q2 = Heap<int>(10);
+
 	EXPECT_EQ(q.isEmpty(),true);
 	EXPECT_EQ(q.size(),0);
-	EXPECT_EQ(q2.isEmpty(),true);
-	EXPECT_EQ(q2.size(),0);
 }
 
 TEST(HeapTest, PushHeapTest){
@@ -35,6 +33,7 @@ TEST(HeapTest, PushHeapTest){
 }
 
 TEST(HeapTest, PopHeapTest){
+
 	Heap<int> q;
 	int nums[] = {3,2,5,6,7,9,4,8,1};
 	for (int i : nums){q.push(i);}

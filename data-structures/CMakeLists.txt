@@ -6,7 +6,7 @@ FIND_PACKAGE(Threads)
 
 MESSAGE("Processing Top Level CMakeLists.txt")
 
-SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD 14)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #Enable testing
