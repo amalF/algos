@@ -107,6 +107,7 @@ namespace ds {
       }
       //Release the allocated memory for the old array
       delete[] arr;
+			arr = nullptr;
       //Point to the newly created array
       arr = new_arr;
       capacity = --len;
@@ -193,7 +194,8 @@ namespace ds {
 
   template <typename T>
     void DynamicArray<T>::swap(int id1, int id2){
-      if ((id1 < 0) || (id2<0) || (id1>=len) || (id2>=len)){throw std::out_of_range("Indices out of ranges");}
+      if ((id1 < 0) || (id2<0) || (id1>=len) || (id2>=len)){
+				throw std::out_of_range("Indices out of ranges");}
       T tmp = arr[id1];
       arr[id1] = arr[id2];
       arr[id2] = tmp;

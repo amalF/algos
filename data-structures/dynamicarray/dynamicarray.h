@@ -36,6 +36,11 @@ namespace ds {
           return arr[index];
         }
 
+				void set(const T value, int index){
+					if ((index<0) || (index>=len)){throw std::out_of_range("[peek] Index out of range");}
+					arr[index] = value;
+				}
+
         int size();
         bool isEmpty();
         int maxSize();

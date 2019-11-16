@@ -1,5 +1,5 @@
 /**
- * Simple C++ main for launching linked list test.
+ * Simple C++ main for launching heap test.
  *
  * @author
  *   Amal Feriani
