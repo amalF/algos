@@ -13,6 +13,7 @@ This project will contains implementation of several data structures and algorit
 - [x] [Queue](data-structures/queue)
 	* [Queue (Double linked list)](data-structures/queue/queue.hpp)
 - [x] [Binary Search Tree](data-structures/binarysearchtree)
+- [x] [MinHeap](data-structures/heap)
 
 # Sorting Algorithms
 - [x] Insertion Sort ([Linked List](data-structures/linkedlist/linkedlist.hpp), [dynamic array](data-structures/dynamicarray/dynamicarray.hpp))
